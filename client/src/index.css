@@ -35,3 +35,32 @@ button {
 button:hover {
   background: #2559c7;
 }
+
+.purpose-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.purpose-card {
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #d9dee5;
+  text-align: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  user-select: none;
+}
+
+.purpose-card:hover {
+  border-color: #2f6fed;
+}
+
+.purpose-card.selected {
+  border-color: #2f6fed;
+  background: #eaf0fe;
+  color: #2f6fed;
+  font-weight: 600;
+}
+
+
