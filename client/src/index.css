@@ -38,7 +38,7 @@ button:hover {
 
 .purpose-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
 }
 
@@ -57,6 +57,25 @@ button:hover {
 }
 
 .purpose-card.selected {
+  border-color: #2f6fed;
+  background: #eaf0fe;
+  color: #2f6fed;
+  font-weight: 600;
+}
+
+.chip {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid #d9dee5;
+  font-size: 0.85rem;
+  user-select: none;
+}
+
+.chip:hover {
+  border-color: #2f6fed;
+}
+
+.chip.selected {
   border-color: #2f6fed;
   background: #eaf0fe;
   color: #2f6fed;
