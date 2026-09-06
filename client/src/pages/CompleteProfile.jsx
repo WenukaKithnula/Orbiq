@@ -187,6 +187,7 @@ export function CompleteProfile() {
         starterCategories: categories,
         referralSource: referralSource || null,
         emailNotifications,
+        
       });
       navigate('/dashboard');
     } catch (err) {

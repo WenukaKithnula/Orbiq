@@ -22,7 +22,7 @@ export async function getMe(req, res) {
 // Creates the profile row after the Complete Your Profile form is submitted.
 export async function createProfile(req, res) {
   const { authId } = req;
-  const { fullName, username, timezone,purpose} = req.body;
+  const { fullName, username, timezone, purpose, starterCategories } = req.body;
 
   if (!fullName || !username || !purpose) {
     return res.status(400).json({ error: 'fullName and username purpose are required' });
@@ -30,10 +30,10 @@ export async function createProfile(req, res) {
 
   try {
     const result = await pool.query(
-      `INSERT INTO app_user_data (auth_id, full_name, username, timezone ,purpose)
-       VALUES ($1, $2, $3, $4 , $5)
+      `INSERT INTO app_user_data (auth_id, full_name, username, timezone, purpose, Categories)
+       VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING *`,
-      [authId, fullName, username, timezone , purpose]
+      [authId, fullName, username, timezone, purpose, JSON.stringify(starterCategories ?? [])]
     );
     return res.status(201).json({ profile: result.rows[0] });
   } catch (err) {
