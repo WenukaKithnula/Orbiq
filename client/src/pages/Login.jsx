@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../lib/apiClient';
 
@@ -8,17 +8,27 @@ export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError(null);
-    const { error } = await signIn(email, password);
-    if (error) return setError(error.message);
+    setSubmitting(true);
+    try {
+      const { error } = await signIn(email, password);
+      if (error) return setError(error.message);
 
-    // Returning user -- check whether they already have a profile
-    const { profileComplete } = await api.getMe();
-    navigate(profileComplete ? '/dashboard' : '/complete-profile');
+      // Returning user -- check whether they already have a profile
+      try {
+        const { profileComplete } = await api.getMe();
+        navigate(profileComplete ? '/dashboard' : '/complete-profile');
+      } catch (err) {
+        setError(err.message);
+      }
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -32,7 +42,8 @@ export function Login() {
              onChange={(e) => setPassword(e.target.value)} required />
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <button type="submit">Log in</button>
+      <button type="submit" disabled={submitting}>{submitting ? 'Logging in…' : 'Log in'}</button>
+      <p>Back to Landing Page <Link to="/">Home Page</Link></p>
     </form>
   );
 }
