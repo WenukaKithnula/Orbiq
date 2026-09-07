@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS app_user_data (
     full_name     TEXT NOT NULL,
     username      TEXT NOT NULL UNIQUE,
     timezone      TEXT,
+    purpose       TEXT,
+    categories    JSONB,
     avatar_url    TEXT,
     onboarding_completed BOOLEAN DEFAULT true,
     created_at    TIMESTAMPTZ DEFAULT now()

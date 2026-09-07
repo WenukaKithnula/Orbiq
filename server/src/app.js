@@ -7,8 +7,12 @@ const app = express();
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
 
-app.use('/api/user', userRoutes);
+app.use('/api', userRoutes);
+app.get('/test' , (req,res)=>{
 
-app.get('/api', (req, res) => res.json({ ok: true }));
+    res.send({message:"working"})
+})
+
+
 
 export default app;

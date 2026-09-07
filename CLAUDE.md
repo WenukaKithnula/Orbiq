@@ -9,7 +9,7 @@
 ## How auth flows into the backend
 1. Client authenticates via `supabase.auth.*` (see `client/src/lib/supabaseClient.js`, `client/src/context/AuthContext.jsx`). Supabase issues a JWT.
 2. Every request to the Node backend goes through `client/src/lib/apiClient.js` (axios instance), which attaches that JWT as `Authorization: Bearer <token>`.
-3. The Express backend verifies the JWT itself using `SUPABASE_JWT_SECRET` (`server/src/middleware/verifySupabaseAuth.js`) — no network call back to Supabase needed. On success it sets `req.authId` (the Supabase user's UUID, from the JWT's `sub` claim).
+3. The Express backend verifies the JWT itself against the project's public signing keys, fetched from Supabase's JWKS endpoint (`SUPABASE_URL`, `server/src/middleware/verifySupabaseAuth.js`) — no per-request round trip to Supabase's API needed, since `jose` caches the keys. On success it sets `req.authId` (the Supabase user's UUID, from the JWT's `sub` claim).
 4. Controllers (`server/src/controllers/`) use `req.authId` to scope all Postgres queries to the current user.
 
 ## Conventions for new features

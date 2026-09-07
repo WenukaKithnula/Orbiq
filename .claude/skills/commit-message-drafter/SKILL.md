@@ -48,13 +48,11 @@ Structure:
 ```
 type(scope): short summary in imperative mood, no period, under ~60 chars
 
-Optional body: explain WHY this change was made and what it does,
-not a line-by-line restatement of the diff. Wrap around 72 chars.
-Mention any non-obvious tradeoffs or things a reviewer should know.
-
-Optional footer: BREAKING CHANGE: description, or references like
-Closes #123, if the user mentions an associated issue/ticket.
+Optional body (max 2 lines): the one thing a reviewer needs to know —
+why, not what. Wrap around 72 chars. Skip it if the summary says enough.
 ```
+
+The whole message — summary plus body — should fit in **3 lines or fewer**. If there's a footer (`BREAKING CHANGE:`, `Closes #123`), it replaces rather than adds to the body lines.
 
 Rules for the summary line:
 - **Imperative mood** — "add," "fix," "remove," not "added," "fixes," "removes." Test: it should complete the sentence "If applied, this commit will ___."
@@ -62,8 +60,9 @@ Rules for the summary line:
 - Specific, not vague — "fix(tasks): prevent duplicate submission on double-click" beats "fix bug."
 
 Rules for the body:
+- Keep the whole message short and sweet — **max 3 lines total** (summary line + at most 2 body lines). No multi-paragraph explanations, no bullet lists of every file touched.
 - Only include a body if the summary line alone doesn't capture the important context. A one-line config tweak doesn't need one; a bug fix with a non-obvious root cause does.
-- Explain the *reasoning* — what problem existed, why this approach was chosen — not just a restatement of what the diff shows.
+- Explain the *reasoning* — what problem existed, why this approach was chosen — not just a restatement of what the diff shows. Pick the single most important thing a reviewer needs to know, not everything.
 - If the change fixes a bug, briefly state what the bug was and its impact, not just the fix.
 
 ## Step 4: Present it — do not commit
@@ -76,9 +75,8 @@ Here's a commit message for these changes:
 ---
 feat(tasks): add priority field with three-tier sorting
 
-Tasks can now be marked Low/Medium/High priority. The task list
-sorts by priority within each date group, so urgent items surface
-first without needing a separate filter.
+Task list now sorts by priority within each date group, so urgent
+items surface without needing a separate filter.
 ---
 
 Want me to adjust anything, or is this good to use?

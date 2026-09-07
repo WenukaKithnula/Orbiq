@@ -21,12 +21,12 @@ Run `server/src/db/schema.sql` against your Postgres database.
 ### 2. Backend
 ```
 cd server
-cp .env.example .env      # fill in DATABASE_URL and SUPABASE_JWT_SECRET
+cp .env.example .env      # fill in DATABASE_URL and SUPABASE_URL
 npm install
 npm run dev                # starts on http://localhost:4000
 ```
-`SUPABASE_JWT_SECRET` is found in your Supabase project settings under
-API \u2192 JWT Settings.
+`SUPABASE_URL` is your project's URL, e.g. `https://<project-ref>.supabase.co` \u2014
+the backend uses it to fetch Supabase's public JWKS for verifying JWTs.
 
 ### 3. Frontend
 ```
