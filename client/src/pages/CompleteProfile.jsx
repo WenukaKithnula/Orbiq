@@ -273,6 +273,7 @@ export function CompleteProfile() {
             <option value="">How'd you hear about us? (optional)</option>
             {REFERRAL_SOURCES.map((s) => <option key={s} value={s}>{s}</option>)}
           </select>
+          <p>Comming soon heheheS</p>
           <label style={checkboxRowStyle}>
             <input type="checkbox" checked={emailNotifications}
                    onChange={(e) => setEmailNotifications(e.target.checked)} />

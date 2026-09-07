@@ -26,13 +26,14 @@ export function Dashboard() {
   }, []);
 
   if (loading) {
-    return <LoadingScreen />;
+    return <LoadingScreen/>;
   }
 
   return (
     <div>
       <h1>Good morning, {profile?.full_name ?? '...'}</h1>
       <h2>{profile?.username}</h2>
+      <h2>{profile?.categories}</h2>
       <button onClick={signOut}>Log out</button>
     </div>
   );
