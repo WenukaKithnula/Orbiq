@@ -1,11 +1,22 @@
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { MAIN_NAV, PLACEHOLDER_WORKSPACES, PLACEHOLDER_GROUPS } from '../../config/navigation';
+import { useState } from 'react';
 
 export function Sidebar({ profile }) {
   const { user, signOut } = useAuth();
+  const [aiAgentPrompt , setaiAgentPrompt] = useState('');
   const displayName = profile?.full_name || user?.email || '';
   const initial = displayName ? displayName[0].toUpperCase() : '?';
+
+  function aiagent(){
+    return(
+      <>
+        
+      </>
+    )
+
+  }
 
   return (
     <aside className="sidebar">
@@ -24,11 +35,14 @@ export function Sidebar({ profile }) {
       <input
         type="text"
         className="sidebar-ai-input"
-        placeholder="Ask Orbiq… (coming soon)"
-        disabled
+        placeholder="Ask Orbiq… ai"
+        value ={aiAgentPrompt}
+        onChange={(e)=>setaiAgentPrompt(e.target.value)}
       />
+      {aiAgentPrompt!=='' && <button onClick={aiagent} className='agent-btn'>Ask ai</button>}
+      
 
-      <nav className="sidebar-nav" aria-label="Primary">
+      <nav className="sidebar-nav sidebar-card" aria-label="Primary">
         {MAIN_NAV.map((item) => (
           <NavLink
             key={item.path}
@@ -52,7 +66,7 @@ export function Sidebar({ profile }) {
 
 function SidebarSection({ title, items, addLabel }) {
   return (
-    <div className="sidebar-section">
+    <div className="sidebar-section sidebar-card">
       <p className="sidebar-section-title">{title}</p>
       <ul className="sidebar-section-list">
         {items.map((item) => (

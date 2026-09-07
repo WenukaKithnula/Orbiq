@@ -24,6 +24,10 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  border: 2px solid rgb(209, 122, 51);
+  padding: 10px;
+  border-radius: 10px;
+  background-color: rgba(246, 230, 219, 0.614);
 }
 
 .sidebar-avatar {
@@ -61,6 +65,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.agent-btn{
+  background-color: rgb(235, 177, 110);
+}
+.agent-btn:hover{
+  background-color: rgb(250, 152, 96);
+  
+}
 
 .sidebar-header-actions {
   display: flex;
@@ -79,7 +90,7 @@
 }
 
 .sidebar-text-link:hover {
-  color: #2f6fed;
+  color: #f5cba7;
 }
 
 .sidebar-ai-input {
@@ -91,6 +102,23 @@
   font-size: 0.85rem;
   background: #fff;
   color: #8a97a6;
+}
+
+.sidebar-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 0.6rem;
+  box-shadow:
+    0 1px 2px rgba(30, 42, 56, 0.06),
+    0 6px 16px rgba(30, 42, 56, 0.10);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sidebar-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 2px 4px rgba(30, 42, 56, 0.08),
+    0 10px 24px rgba(30, 42, 56, 0.16);
 }
 
 .sidebar-nav {
@@ -113,7 +141,7 @@
 
 .sidebar-nav-link.active {
   background: #eaf0fe;
-  color: #2f6fed;
+  color: #fa8768;
   font-weight: 600;
 }
 
