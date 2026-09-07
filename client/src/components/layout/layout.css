@@ -1,0 +1,173 @@
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem 1rem;
+  background: #f4f5f7;
+  border-right: 1px solid #d9dee5;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sidebar-avatar {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #eaf0fe;
+  border: 1px solid #2f6fed;
+  color: #2f6fed;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-user-info {
+  min-width: 0;
+}
+
+.sidebar-user-name {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-user-email {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #5b6b7d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-header-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: -0.75rem;
+}
+
+.sidebar-text-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #5b6b7d;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.sidebar-text-link:hover {
+  color: #2f6fed;
+}
+
+.sidebar-ai-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #d9dee5;
+  font-size: 0.85rem;
+  background: #fff;
+  color: #8a97a6;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.sidebar-nav-link {
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #1e2a38;
+  text-decoration: none;
+}
+
+.sidebar-nav-link:hover {
+  background: #eaeef3;
+}
+
+.sidebar-nav-link.active {
+  background: #eaf0fe;
+  color: #2f6fed;
+  font-weight: 600;
+}
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sidebar-section-title {
+  margin: 0 0 0.25rem;
+  padding: 0 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #8a97a6;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.sidebar-section-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.sidebar-section-item {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  color: #1e2a38;
+  cursor: default;
+}
+
+.sidebar-section-item:hover {
+  background: #eaeef3;
+}
+
+.sidebar-section-add {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  color: #8a97a6;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 0.5rem 0.75rem 0;
+  border-top: 1px solid #d9dee5;
+}
+
+.sidebar-version {
+  font-size: 0.75rem;
+  color: #8a97a6;
+}
