@@ -9,7 +9,6 @@ export function AppLayout() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
   useEffect(() => {
     async function loadProfile() {
       const { profileComplete, profile } = await api.getMe();
