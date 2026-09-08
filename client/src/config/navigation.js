@@ -8,6 +8,7 @@ export const MAIN_NAV = [
 ];
 
 
-export const PLACEHOLDER_WORKSPACES = ['School', 'Work', 'Fitness'];
-
+// Groups has no backend yet (no DB table or API routes) -- hardcoded here
+// until that's built, so the sidebar has something to show. Workspaces is
+// now real data, fetched via api.getworkspaces() in AppLayout.
 export const PLACEHOLDER_GROUPS = ['Finals Study Group'];

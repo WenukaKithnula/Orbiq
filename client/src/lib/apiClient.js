@@ -28,4 +28,5 @@ export const api = {
   getMe: () => client.get('/api/user/me'),
   createProfile: (data) => client.post('/api/user/users', data),
   createWorkspace: (data) => client.post('/api/workspaces', data),
+  getworkspaces: () => client.get('/api/workspaces'),
 };

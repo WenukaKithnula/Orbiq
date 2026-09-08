@@ -1,14 +1,13 @@
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { MAIN_NAV, PLACEHOLDER_WORKSPACES, PLACEHOLDER_GROUPS } from '../../config/navigation';
+import { MAIN_NAV, PLACEHOLDER_GROUPS } from '../../config/navigation';
 import { useState } from 'react';
 import { api } from '../../lib/apiClient';
 import { AddWorkspaceModal } from '../AddWorkspaceModal';
 
-export function Sidebar({ profile }) {
+export function Sidebar({ profile, workspaces, workspacesError, onWorkspaceCreated }) {
   const { user, signOut } = useAuth();
   const [aiAgentPrompt , setaiAgentPrompt] = useState('');
-  const [workspaces, setWorkspaces] = useState(PLACEHOLDER_WORKSPACES);
 
   const displayName = profile?.full_name || user?.email || '';
   const initial = displayName ? displayName[0].toUpperCase() : '?';
@@ -28,7 +27,7 @@ export function Sidebar({ profile }) {
       throw new Error('Workspace name is required');
     }
     const { workspace } = await api.createWorkspace({ name: trimmed });
-    setWorkspaces((prev) => [...prev, workspace.name]);
+    onWorkspaceCreated(workspace);
     return workspace;
   }
 
@@ -68,7 +67,13 @@ export function Sidebar({ profile }) {
         ))}
       </nav>
 
-      <SidebarSection title="Workspaces" items={workspaces} addLabel="+ New workspace" onAdd={createworkspace} />
+      <SidebarSection
+        title="Workspaces"
+        items={workspaces.map((workspace) => workspace.name)}
+        addLabel="+ New workspace"
+        onAdd={createworkspace}
+        loadError={workspacesError}
+      />
       <SidebarSection title="Groups" items={PLACEHOLDER_GROUPS} />
 
       <div className="sidebar-footer">
@@ -78,7 +83,7 @@ export function Sidebar({ profile }) {
   );
 }
 
-function SidebarSection({ title, items, addLabel, onAdd }) {
+function SidebarSection({ title, items, addLabel, onAdd, loadError }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [status, setStatus] = useState(null);
 
@@ -91,11 +96,18 @@ function SidebarSection({ title, items, addLabel, onAdd }) {
   return (
     <div className="sidebar-section sidebar-card">
       <p className="sidebar-section-title">{title}</p>
-      <ul className="sidebar-section-list">
-        {items.map((item) => (
-          <li key={item} className="sidebar-section-item">{item}</li>
-        ))}
-      </ul>
+
+      {loadError ? (
+        <p className="sidebar-section-status sidebar-section-status--error">
+          Could not load {title.toLowerCase()}: {loadError}
+        </p>
+      ) : (
+        <ul className="sidebar-section-list">
+          {items.map((item) => (
+            <li key={item} className="sidebar-section-item">{item}</li>
+          ))}
+        </ul>
+      )}
 
       {addLabel && (
         <button

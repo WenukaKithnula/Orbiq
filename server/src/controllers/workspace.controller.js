@@ -20,19 +20,17 @@ export async function createWorkspace(req,res){
 }
 
 export async function getworkspaces(req,res){
-
-  const{authId} = req;
+  const { authId } = req;
   try{
-
     const results = await pool.query(
-      `SELECT * FROM workspaces WHERE auth_id = $1
-       `
-       [authId]
-    )
-    res.status(200).json(results.rows)
+      'SELECT * FROM workspaces WHERE auth_id = $1',
+      [authId]
+    );
+    res.status(200).json({ workspaces: results.rows });
   }
   catch(err){
-    res.status(500).json({error:"could not fetch the workspaces"})
+    console.error(err);
+    res.status(500).json({ error: 'Could not fetch workspaces' });
   }
 }
 
