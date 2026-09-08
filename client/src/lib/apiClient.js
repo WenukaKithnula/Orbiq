@@ -25,6 +25,7 @@ client.interceptors.response.use(
 );
 
 export const api = {
-  getMe: () => client.get('/api/me'),
-  createProfile: (data) => client.post('/api/users', data),
+  getMe: () => client.get('/api/user/me'),
+  createProfile: (data) => client.post('/api/user/users', data),
+  createWorkspace: (data) => client.post('/api/workspaces', data),
 };
