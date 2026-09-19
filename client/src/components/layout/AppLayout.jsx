@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { api } from '../../lib/apiClient';
-import { LoadingScreen } from '../LoadingScreen';
+import { LoadingScreen } from '../common/LoadingScreen';
 import { Sidebar } from './Sidebar';
 import './layout.css';
 

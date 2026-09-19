@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { MAIN_NAV, PLACEHOLDER_GROUPS } from '../../config/navigation';
 import { useState } from 'react';
 import { api } from '../../lib/apiClient';
-import { AddWorkspaceModal } from '../AddWorkspaceModal';
+import { AddWorkspaceModal } from '../workspace/AddWorkspaceModal';
 
 export function Sidebar({ profile, workspaces, workspacesError, onWorkspaceCreated }) {
   const { user, signOut } = useAuth();
