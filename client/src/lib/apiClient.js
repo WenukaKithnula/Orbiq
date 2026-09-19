@@ -29,4 +29,5 @@ export const api = {
   createProfile: (data) => client.post('/api/user/users', data),
   createWorkspace: (data) => client.post('/api/workspaces', data),
   getworkspaces: () => client.get('/api/workspaces'),
+  deleteWorkspace: (id) => client.delete(`/api/workspaces/${id}`),
 };

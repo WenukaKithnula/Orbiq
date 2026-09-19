@@ -34,3 +34,26 @@ export async function getworkspaces(req,res){
   }
 }
 
+// DELETE /api/workspaces/:id
+export async function deleteWorkspace(req, res) {
+  const { authId } = req;
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      `DELETE FROM workspaces
+       WHERE id = $1 AND auth_id = $2
+       RETURNING id`,
+      [id, authId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Workspace not found' });
+    }
+    return res.status(204).send();
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Could not delete workspace' });
+  }
+}
+
