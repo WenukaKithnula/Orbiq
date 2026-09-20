@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { createPortal } from 'react-dom';
 
 export function AddWorkspaceModal({ open, onClose, onCreate }) {
-  const [name, setName] = useState('');
+  const [workspacename, setWorkspaceName] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
@@ -12,7 +12,7 @@ export function AddWorkspaceModal({ open, onClose, onCreate }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const trimmed = name.trim();
+    const trimmed = workspacename.trim();
     if (!trimmed) {
       setError('Workspace name is required');
       return;
@@ -22,7 +22,7 @@ export function AddWorkspaceModal({ open, onClose, onCreate }) {
     setError(null);
     try {
       await onCreate(trimmed);
-      setName('');
+      setWorkspaceName('');
       onClose();
     } catch (err) {
       setError(err.message);
@@ -38,13 +38,13 @@ export function AddWorkspaceModal({ open, onClose, onCreate }) {
   return createPortal(
     <div style={styles.overlay} onClick={handleOverlayClick}>
       <div style={styles.card} role="dialog" aria-modal="true" aria-labelledby="add-workspace-title">
-        <h2 id="add-workspace-title" style={styles.title}>New workspace</h2>
+        <h2 id="add-workspace-title" style={styles.title}> Add New workspace</h2>
         <form style={styles.form} onSubmit={handleSubmit}>
           <input
             autoFocus
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={workspacename}
+            onChange={(e) => setWorkspaceName(e.target.value)}
             placeholder="Workspace name"
           />
           {error && <p style={styles.error}>{error}</p>}

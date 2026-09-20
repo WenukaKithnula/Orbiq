@@ -164,7 +164,7 @@ function SidebarSection({ title, items, addLabel, onAdd, onDelete, loadError }) 
       {onDelete && (
         <ConfirmDialog
           open={pendingDelete !== null}
-          message={`Are you sure you want to delete "${pendingDelete?.label}"?`}
+          message={`Are you sure you want to delete "${pendingDelete?.label}" workspace?`}
           onConfirm={handleConfirmDelete}
           onCancel={() => setPendingDelete(null)}
         />
