@@ -4,8 +4,9 @@ import { MAIN_NAV, PLACEHOLDER_GROUPS } from '../../config/navigation';
 import { useState } from 'react';
 import { api } from '../../lib/apiClient';
 import { AddWorkspaceModal } from '../workspace/AddWorkspaceModal';
+import { ConfirmDialog } from '../common/ConfirmDialog';
 
-export function Sidebar({ profile, workspaces, workspacesError, onWorkspaceCreated }) {
+export function Sidebar({ profile, workspaces, workspacesError, onWorkspaceCreated, onWorkspaceDeleted }) {
   const { user, signOut } = useAuth();
   const [aiAgentPrompt , setaiAgentPrompt] = useState('');
 
@@ -29,6 +30,11 @@ export function Sidebar({ profile, workspaces, workspacesError, onWorkspaceCreat
     const { workspace } = await api.createWorkspace({ name: trimmed });
     onWorkspaceCreated(workspace);
     return workspace;
+  }
+
+  async function deleteworkspace(id) {
+    await api.deleteWorkspace(id);
+    onWorkspaceDeleted(id);
   }
 
   return (
@@ -69,12 +75,16 @@ export function Sidebar({ profile, workspaces, workspacesError, onWorkspaceCreat
 
       <SidebarSection
         title="Workspaces"
-        items={workspaces.map((workspace) => workspace.name)}
+        items={workspaces.map((workspace) => ({ id: workspace.id, label: workspace.name }))}
         addLabel="+ New workspace"
         onAdd={createworkspace}
+        onDelete={deleteworkspace}
         loadError={workspacesError}
       />
-      <SidebarSection title="Groups" items={PLACEHOLDER_GROUPS} />
+      <SidebarSection
+        title="Groups"
+        items={PLACEHOLDER_GROUPS.map((name) => ({ id: name, label: name }))}
+      />
 
       <div className="sidebar-footer">
         <span className="sidebar-version">v{__APP_VERSION__}</span>
@@ -83,14 +93,20 @@ export function Sidebar({ profile, workspaces, workspacesError, onWorkspaceCreat
   );
 }
 
-function SidebarSection({ title, items, addLabel, onAdd, loadError }) {
+function SidebarSection({ title, items, addLabel, onAdd, onDelete, loadError }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [status, setStatus] = useState(null);
+  const [pendingDelete, setPendingDelete] = useState(null);
 
   async function handleCreate(name) {
     const created = await onAdd(name);
     setStatus({ type: 'success', message: `Successfully created "${created.name}"` });
     return created;
+  }
+
+  async function handleConfirmDelete() {
+    await onDelete(pendingDelete.id);
+    setPendingDelete(null);
   }
 
   return (
@@ -104,7 +120,19 @@ function SidebarSection({ title, items, addLabel, onAdd, loadError }) {
       ) : (
         <ul className="sidebar-section-list">
           {items.map((item) => (
-            <li key={item} className="sidebar-section-item">{item}</li>
+            <li key={item.id} className="sidebar-section-item">
+              <span className="sidebar-section-item-label">{item.label}</span>
+              {onDelete && (
+                <button
+                  type="button"
+                  className="sidebar-section-delete"
+                  aria-label={`Delete ${item.label}`}
+                  onClick={() => setPendingDelete(item)}
+                >
+                  <TrashIcon />
+                </button>
+              )}
+            </li>
           ))}
         </ul>
       )}
@@ -132,6 +160,27 @@ function SidebarSection({ title, items, addLabel, onAdd, loadError }) {
           onCreate={handleCreate}
         />
       )}
+
+      {onDelete && (
+        <ConfirmDialog
+          open={pendingDelete !== null}
+          message={`Are you sure you want to delete "${pendingDelete?.label}"?`}
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setPendingDelete(null)}
+        />
+      )}
     </div>
+  );
+}
+
+function TrashIcon() {
+  return (
+    <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <path
+        d="M4 6h12M8 6V4.5A1.5 1.5 0 0 1 9.5 3h1A1.5 1.5 0 0 1 12 4.5V6M5.5 6l.6 10a1.5 1.5 0 0 0 1.5 1.4h4.8a1.5 1.5 0 0 0 1.5-1.4l.6-10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }

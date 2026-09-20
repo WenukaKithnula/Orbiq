@@ -173,6 +173,10 @@
 }
 
 .sidebar-section-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
   font-size: 0.88rem;
@@ -182,6 +186,36 @@
 
 .sidebar-section-item:hover {
   background: #eaeef3;
+}
+
+.sidebar-section-item-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-section-delete {
+  flex-shrink: 0;
+  padding: 0.2rem;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  color: #8a97a6;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar-section-item:hover .sidebar-section-delete,
+.sidebar-section-item:focus-within .sidebar-section-delete {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-section-delete:hover,
+.sidebar-section-delete:focus-visible {
+  background: #fbdcdc;
+  color: #d64545;
 }
 
 .sidebar-section-add {

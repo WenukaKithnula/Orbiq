@@ -42,6 +42,10 @@ export function AppLayout() {
     setWorkspaces((prev) => [...prev, workspace]);
   }
 
+  function handleWorkspaceDeleted(id) {
+    setWorkspaces((prev) => prev.filter((workspace) => workspace.id !== id));
+  }
+
   return (
     <div className="app-shell">
       <Sidebar
@@ -49,6 +53,7 @@ export function AppLayout() {
         workspaces={workspaces}
         workspacesError={workspacesError}
         onWorkspaceCreated={handleWorkspaceCreated}
+        onWorkspaceDeleted={handleWorkspaceDeleted}
       />
       <main className="app-content">
         <Outlet context={profile} />
