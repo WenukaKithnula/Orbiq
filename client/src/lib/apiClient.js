@@ -30,4 +30,7 @@ export const api = {
   createWorkspace: (data) => client.post('/api/workspaces', data),
   getworkspaces: () => client.get('/api/workspaces'),
   deleteWorkspace: (id) => client.delete(`/api/workspaces/${id}`),
+  createGroup: (data) => client.post('/api/groups', data),
+  getGroups: () => client.get('/api/groups'),
+  joinGroup: (inviteCode) => client.post('/api/groups/join', { inviteCode }),
 };

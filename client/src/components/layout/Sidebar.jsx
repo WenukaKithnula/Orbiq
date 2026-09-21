@@ -1,12 +1,24 @@
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { MAIN_NAV, PLACEHOLDER_GROUPS } from '../../config/navigation';
+import { MAIN_NAV } from '../../config/navigation';
 import { useState } from 'react';
 import { api } from '../../lib/apiClient';
 import { AddWorkspaceModal } from '../workspace/AddWorkspaceModal';
 import { ConfirmDialog } from '../common/ConfirmDialog';
+import { CreateGroupModal } from '../groups/CreateGroupModal';
+import { JoinGroupModal } from '../groups/JoinGroupModal';
 
-export function Sidebar({ profile, workspaces, workspacesError, onWorkspaceCreated, onWorkspaceDeleted }) {
+export function Sidebar({
+  profile,
+  workspaces,
+  workspacesError,
+  onWorkspaceCreated,
+  onWorkspaceDeleted,
+  groups,
+  groupsError,
+  onGroupCreated,
+  onGroupJoined,
+}) {
   const { user, signOut } = useAuth();
   const [aiAgentPrompt , setaiAgentPrompt] = useState('');
 
@@ -35,6 +47,22 @@ export function Sidebar({ profile, workspaces, workspacesError, onWorkspaceCreat
   async function deleteworkspace(id) {
     await api.deleteWorkspace(id);
     onWorkspaceDeleted(id);
+  }
+
+  async function creategroup(name, description) {
+    const trimmed = name.trim();
+    if (!trimmed) {
+      throw new Error('Group name is required');
+    }
+    const { group } = await api.createGroup({ name: trimmed, description: description || undefined });
+    onGroupCreated(group);
+    return group;
+  }
+
+  async function joingroup(inviteCode) {
+    const { group } = await api.joinGroup(inviteCode);
+    onGroupJoined(group);
+    return group;
   }
 
   return (
@@ -81,9 +109,11 @@ export function Sidebar({ profile, workspaces, workspacesError, onWorkspaceCreat
         onDelete={deleteworkspace}
         loadError={workspacesError}
       />
-      <SidebarSection
-        title="Groups"
-        items={PLACEHOLDER_GROUPS.map((name) => ({ id: name, label: name }))}
+      <GroupsSection
+        groups={groups}
+        groupsError={groupsError}
+        onCreate={creategroup}
+        onJoin={joingroup}
       />
 
       <div className="sidebar-footer">
@@ -169,6 +199,78 @@ function SidebarSection({ title, items, addLabel, onAdd, onDelete, loadError }) 
           onCancel={() => setPendingDelete(null)}
         />
       )}
+    </div>
+  );
+}
+
+function GroupsSection({ groups, groupsError, onCreate, onJoin }) {
+  const [createOpen, setCreateOpen] = useState(false);
+  const [joinOpen, setJoinOpen] = useState(false);
+  const [status, setStatus] = useState(null);
+
+  async function handleCreate(name, description) {
+    const created = await onCreate(name, description);
+    setStatus({ type: 'success', message: `Successfully created "${created.name}"` });
+    return created;
+  }
+
+  async function handleJoin(inviteCode) {
+    const joined = await onJoin(inviteCode);
+    setStatus({ type: 'success', message: `Successfully joined "${joined.name}"` });
+    return joined;
+  }
+
+  return (
+    <div className="sidebar-section sidebar-card">
+      <p className="sidebar-section-title">Groups</p>
+
+      {groupsError ? (
+        <p className="sidebar-section-status sidebar-section-status--error">
+          Could not load groups: {groupsError}
+        </p>
+      ) : (
+        <ul className="sidebar-section-list">
+          {groups.map((group) => (
+            <li key={group.id} className="sidebar-section-item">
+              <span className="sidebar-section-item-label">{group.name}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <div className="sidebar-section-actions">
+        <button
+          type="button"
+          className="sidebar-section-add"
+          onClick={() => { setCreateOpen(true); setStatus(null); }}
+        >
+          + New group
+        </button>
+        <button
+          type="button"
+          className="sidebar-section-add"
+          onClick={() => { setJoinOpen(true); setStatus(null); }}
+        >
+          + Join group
+        </button>
+      </div>
+
+      {status && (
+        <p className={`sidebar-section-status sidebar-section-status--${status.type}`}>
+          {status.message}
+        </p>
+      )}
+
+      <CreateGroupModal
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+        onCreate={handleCreate}
+      />
+      <JoinGroupModal
+        open={joinOpen}
+        onClose={() => setJoinOpen(false)}
+        onJoin={handleJoin}
+      />
     </div>
   );
 }

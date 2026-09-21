@@ -65,6 +65,24 @@ export async function createGroup(req, res) {
   }
 }
 
+// GET /api/groups
+// Lists every group workspace the authenticated user belongs to.
+export async function getGroups(req, res) {
+  const { authId } = req;
+  try {
+    const result = await pool.query(
+      `SELECT g.*, m.role FROM group_workspaces g
+       JOIN group_workspace_members m ON m.group_workspace_id = g.id
+       WHERE m.auth_id = $1`,
+      [authId]
+    );
+    return res.status(200).json({ groups: result.rows });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Could not fetch groups' });
+  }
+}
+
 // POST /api/groups/join
 // Looks a group up by its invite code and adds the authenticated user as a member.
 export async function joinGroup(req, res) {

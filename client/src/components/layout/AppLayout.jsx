@@ -9,6 +9,8 @@ export function AppLayout() {
   const [profile, setProfile] = useState(null);
   const [workspaces, setWorkspaces] = useState([]);
   const [workspacesError, setWorkspacesError] = useState(null);
+  const [groups, setGroups] = useState([]);
+  const [groupsError, setGroupsError] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -26,6 +28,13 @@ export function AppLayout() {
         setWorkspaces(workspaces);
       } catch (err) {
         setWorkspacesError(err.message);
+      }
+
+      try {
+        const { groups } = await api.getGroups();
+        setGroups(groups);
+      } catch (err) {
+        setGroupsError(err.message);
       }
 
       setLoading(false);
@@ -46,6 +55,14 @@ export function AppLayout() {
     setWorkspaces((prev) => prev.filter((workspace) => workspace.id !== id));
   }
 
+  function handleGroupCreated(group) {
+    setGroups((prev) => [...prev, group]);
+  }
+
+  function handleGroupJoined(group) {
+    setGroups((prev) => (prev.some((g) => g.id === group.id) ? prev : [...prev, group]));
+  }
+
   return (
     <div className="app-shell">
       <Sidebar
@@ -54,6 +71,10 @@ export function AppLayout() {
         workspacesError={workspacesError}
         onWorkspaceCreated={handleWorkspaceCreated}
         onWorkspaceDeleted={handleWorkspaceDeleted}
+        groups={groups}
+        groupsError={groupsError}
+        onGroupCreated={handleGroupCreated}
+        onGroupJoined={handleGroupJoined}
       />
       <main className="app-content">
         <Outlet context={profile} />
