@@ -64,3 +64,39 @@ export async function createGroup(req, res) {
     client.release();
   }
 }
+
+// POST /api/groups/join
+// Looks a group up by its invite code and adds the authenticated user as a member.
+export async function joinGroup(req, res) {
+  const { authId } = req;
+  const inviteCode = req.body.inviteCode?.trim().toLowerCase();
+
+  if (!inviteCode) {
+    return res.status(400).json({ error: 'Invite code is required' });
+  }
+
+  try {
+    const groupResult = await pool.query(
+      'SELECT * FROM group_workspaces WHERE invite_code = $1',
+      [inviteCode]
+    );
+
+    if (groupResult.rows.length === 0) {
+      return res.status(404).json({ error: 'No group found for that invite code' });
+    }
+
+    const group = groupResult.rows[0];
+
+    await pool.query(
+      `INSERT INTO group_workspace_members (group_workspace_id, auth_id, role)
+       VALUES ($1, $2, 'member')
+       ON CONFLICT (group_workspace_id, auth_id) DO NOTHING`,
+      [group.id, authId]
+    );
+
+    return res.status(200).json({ group });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Could not join group' });
+  }
+}
