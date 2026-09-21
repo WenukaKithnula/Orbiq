@@ -63,6 +63,10 @@ export function AppLayout() {
     setGroups((prev) => (prev.some((g) => g.id === group.id) ? prev : [...prev, group]));
   }
 
+  function handleGroupDeleted(id) {
+    setGroups((prev) => prev.filter((group) => group.id !== id));
+  }
+
   return (
     <div className="app-shell">
       <Sidebar
@@ -75,6 +79,7 @@ export function AppLayout() {
         groupsError={groupsError}
         onGroupCreated={handleGroupCreated}
         onGroupJoined={handleGroupJoined}
+        onGroupDeleted={handleGroupDeleted}
       />
       <main className="app-content">
         <Outlet context={profile} />

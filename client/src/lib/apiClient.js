@@ -33,4 +33,5 @@ export const api = {
   createGroup: (data) => client.post('/api/groups', data),
   getGroups: () => client.get('/api/groups'),
   joinGroup: (inviteCode) => client.post('/api/groups/join', { inviteCode }),
+  deleteGroup: (id) => client.delete(`/api/groups/${id}`),
 };

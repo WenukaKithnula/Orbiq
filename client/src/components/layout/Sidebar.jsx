@@ -18,6 +18,7 @@ export function Sidebar({
   groupsError,
   onGroupCreated,
   onGroupJoined,
+  onGroupDeleted,
 }) {
   const { user, signOut } = useAuth();
   const [aiAgentPrompt , setaiAgentPrompt] = useState('');
@@ -63,6 +64,11 @@ export function Sidebar({
     const { group } = await api.joinGroup(inviteCode);
     onGroupJoined(group);
     return group;
+  }
+
+  async function deletegroup(id) {
+    await api.deleteGroup(id);
+    onGroupDeleted(id);
   }
 
   return (
@@ -114,6 +120,7 @@ export function Sidebar({
         groupsError={groupsError}
         onCreate={creategroup}
         onJoin={joingroup}
+        onDelete={deletegroup}
       />
 
       <div className="sidebar-footer">
@@ -203,10 +210,11 @@ function SidebarSection({ title, items, addLabel, onAdd, onDelete, loadError }) 
   );
 }
 
-function GroupsSection({ groups, groupsError, onCreate, onJoin }) {
+function GroupsSection({ groups, groupsError, onCreate, onJoin, onDelete }) {
   const [createOpen, setCreateOpen] = useState(false);
   const [joinOpen, setJoinOpen] = useState(false);
   const [status, setStatus] = useState(null);
+  const [pendingDelete, setPendingDelete] = useState(null);
 
   async function handleCreate(name, description) {
     const created = await onCreate(name, description);
@@ -218,6 +226,11 @@ function GroupsSection({ groups, groupsError, onCreate, onJoin }) {
     const joined = await onJoin(inviteCode);
     setStatus({ type: 'success', message: `Successfully joined "${joined.name}"` });
     return joined;
+  }
+
+  async function handleConfirmDelete() {
+    await onDelete(pendingDelete.id);
+    setPendingDelete(null);
   }
 
   return (
@@ -233,6 +246,16 @@ function GroupsSection({ groups, groupsError, onCreate, onJoin }) {
           {groups.map((group) => (
             <li key={group.id} className="sidebar-section-item">
               <span className="sidebar-section-item-label">{group.name}</span>
+              {group.role === 'owner' && (
+                <button
+                  type="button"
+                  className="sidebar-section-delete"
+                  aria-label={`Delete ${group.name}`}
+                  onClick={() => setPendingDelete(group)}
+                >
+                  <TrashIcon />
+                </button>
+              )}
             </li>
           ))}
         </ul>
@@ -270,6 +293,13 @@ function GroupsSection({ groups, groupsError, onCreate, onJoin }) {
         open={joinOpen}
         onClose={() => setJoinOpen(false)}
         onJoin={handleJoin}
+      />
+
+      <ConfirmDialog
+        open={pendingDelete !== null}
+        message={`Are you sure you want to delete "${pendingDelete?.name}"? This deletes the group for everyone.`}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setPendingDelete(null)}
       />
     </div>
   );

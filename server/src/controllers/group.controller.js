@@ -83,6 +83,35 @@ export async function getGroups(req, res) {
   }
 }
 
+// DELETE /api/groups/:id
+// Only the group's owner can delete it.
+export async function deleteGroup(req, res) {
+  const { authId } = req;
+  const { id } = req.params;
+
+  try {
+    const groupResult = await pool.query(
+      'SELECT owner_auth_id FROM group_workspaces WHERE id = $1',
+      [id]
+    );
+
+    if (groupResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Group not found' });
+    }
+
+    if (groupResult.rows[0].owner_auth_id !== authId) {
+      return res.status(403).json({ error: 'Only the owner can delete this group workspace' });
+    }
+
+    await pool.query('DELETE FROM group_workspaces WHERE id = $1', [id]);
+
+    return res.status(204).send();
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'Could not delete group' });
+  }
+}
+
 // POST /api/groups/join
 // Looks a group up by its invite code and adds the authenticated user as a member.
 export async function joinGroup(req, res) {
