@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LoadingScreen } from '../components/LoadingScreen';
+import { LoadingScreen } from '../components/common/LoadingScreen';
 
 // Wrap any route that requires a logged-in user, e.g.:
 // <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
