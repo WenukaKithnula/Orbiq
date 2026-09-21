@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import userRoutes from './routes/user.routes.js';
 import workspaceRoutes from './routes/workspace.routes.js';
+import groupRoutes from './routes/group.routes.js';
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(express.json());
 
 app.use('/api/user', userRoutes);
 app.use('/api/workspaces', workspaceRoutes);
+app.use('/api/groups', groupRoutes);
 
 app.get('/test' , (req,res)=>{
 

@@ -20,7 +20,7 @@ export async function createWorkspace(req,res){
 }
 
 export async function getworkspaces(req,res){
-  const { authId } = req;
+  const authId = req.authId;
   try{
     const results = await pool.query(
       'SELECT * FROM workspaces WHERE auth_id = $1',
